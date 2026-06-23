@@ -8,7 +8,7 @@ Application Android de chat multimodal en inférence locale, propulsée par [Gem
 
 **[➜ Télécharger la dernière version (APK)](https://github.com/Gaetan-PRUVOT-SQS/Local-LLM-App/releases/latest)**
 
-1. Sur ton **téléphone Android**, télécharge l'`app-release.apk` depuis la page Releases.
+1. Sur ton **téléphone Android**, télécharge `Local-LLM-App-release.apk` depuis la page Releases.
 2. Ouvre le fichier (*Téléchargements*) → autorise « **installer des applications inconnues** » si demandé.
 3. Lance **Gemma Chat**. Au 1er démarrage : vérification de compatibilité → acceptation de la
    licence Gemma → **téléchargement du modèle (~2,4 Go, Wi-Fi conseillé)**. Ensuite, **tout est hors-ligne**.

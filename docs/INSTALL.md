@@ -14,7 +14,7 @@ Guide pour installer l'APK sur un téléphone Android et comprendre le premier l
 
 ## Méthode simple — sans ordinateur (recommandée)
 
-1. Sur ton téléphone, ouvre la page **[Releases](https://github.com/Gaetan-PRUVOT-SQS/Local-LLM-App/releases/latest)** et télécharge `app-release.apk`.
+1. Sur ton téléphone, ouvre la page **[Releases](https://github.com/Gaetan-PRUVOT-SQS/Local-LLM-App/releases/latest)** et télécharge `Local-LLM-App-release.apk`.
 2. Ouvre le fichier depuis **Téléchargements**.
 3. Android demande d'autoriser l'installation depuis cette source → **Paramètres → autoriser** « installer des applications inconnues », puis reviens et installe.
 4. Ouvre **Gemma Chat**.
@@ -128,10 +128,11 @@ adb shell pm clear com.gaetan.localllmapp
 
 ## Dépannage
 
-### Téléchargement refusé (HTTP 401/403)
+### Téléchargement du modèle qui échoue
 
-Le repo HF source est gated. L'URL de téléchargement (`ModelVariant.downloadUrl`) doit
-pointer vers un **miroir public non protégé**. Voir `docs/BUILD.md` §3.
+L'URL Hugging Face est publique (aucun token requis). En cas d'échec persistant (réseau,
+indisponibilité), utilise **« Charger un modèle déjà présent »** dans l'app, ou un miroir
+au build via `-PMODEL_URL_OVERRIDE=<url>` (voir `docs/BUILD.md` §7).
 
 ### Téléchargement interrompu
 
