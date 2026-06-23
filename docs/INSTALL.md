@@ -8,9 +8,18 @@ Guide pour installer l'APK sur un téléphone Android et comprendre le premier l
 |---------|----------------|
 | Android | 8.0+ (API 26 minimum) |
 | Architecture | arm64-v8a |
-| RAM | 8 Go+ recommandé |
-| Stockage libre | ~3 Go (extraction du modèle) |
+| RAM | 6 Go+ recommandé |
+| Stockage libre | ~3 Go (téléchargement du modèle) |
 | Pixel Tensor G5 | NPU optionnel (Pixel 10) |
+
+## Méthode simple — sans ordinateur (recommandée)
+
+1. Sur ton téléphone, ouvre la page **[Releases](https://github.com/Gaetan-PRUVOT-SQS/Local-LLM-App/releases/latest)** et télécharge `app-release.apk`.
+2. Ouvre le fichier depuis **Téléchargements**.
+3. Android demande d'autoriser l'installation depuis cette source → **Paramètres → autoriser** « installer des applications inconnues », puis reviens et installe.
+4. Ouvre **Gemma Chat**.
+
+Le reste de ce document décrit l'installation **via `adb`** (développeurs).
 
 ## 1. Activer le débogage USB
 
@@ -49,22 +58,43 @@ adb install -r --streaming app/build/outputs/apk/debug/app-debug.apk
 
 Ou transférez l'APK sur l'appareil et ouvrez-le (autorisez les sources inconnues si demandé).
 
-## 3. Premier lancement — extraction du modèle
+## 3. Premier lancement — parcours d'onboarding
 
-L'APK embarque le modèle découpé en chunks (~2,4 Go compressés dans l'APK). **Au premier lancement**, l'application :
+L'APK est **léger (~70 Mo) et ne contient pas le modèle**. Au premier lancement, l'app
+déroule l'onboarding :
 
-1. Lit `manifest.json` depuis les assets
-2. Assemble les chunks `000.bin` … `003.bin`
-3. Écrit `gemma-4-E2B-it.litertlm` dans le stockage interne (`files/models/`)
-4. Affiche une barre de progression
+1. **Compatibilité** — scan RAM / processeur / stockage / NPU
+2. **Choix du modèle** — taille, version texte-seule, Wi-Fi uniquement
+3. **Téléchargement** — récupération du `.litertlm` (~2,4 Go) dans le stockage interne
+   (`files/models/`), avec progression, pause et **reprise automatique** si la connexion coupe
+4. **Hub** une fois le modèle prêt
 
-> Cette étape ne se produit **qu'une seule fois**. Les lancements suivants chargent directement le modèle extrait.
+> Le téléchargement ne se produit **qu'une seule fois**. Les lancements suivants vont
+> directement au Hub. La permission `INTERNET` ne sert qu'à cette étape : l'inférence est
+> ensuite 100 % hors-ligne.
 
-Durée typique : 1 à 3 minutes selon la vitesse de stockage.
+Durée typique : quelques minutes selon le débit réseau.
+
+### Utiliser un modèle déjà présent sur le téléphone (sans téléchargement)
+
+Deux possibilités si le `.litertlm` est déjà sur l'appareil :
+
+1. **Import via l'app** — sur l'écran « Choix du modèle », bouton **« Charger un modèle déjà
+   présent (.litertlm) »** : sélectionnez le fichier (Téléchargements, stockage, etc.), il est
+   copié dans l'app puis chargé. Aucun réseau.
+2. **Push direct via adb** — déposez le fichier dans le stockage interne de l'app ; il est
+   **détecté au lancement** et l'onboarding est sauté :
+
+   ```bash
+   adb push gemma-4-E2B-it.litertlm \
+     /sdcard/Android/data/com.gaetan.localllmapp/files/models/gemma-4-E2B-it.litertlm
+   ```
+
+   (Le nom de fichier doit correspondre à `ModelVariant.fileName`.)
 
 ## 4. Chargement du moteur
 
-Après l'extraction, LiteRT-LM initialise le moteur (~10 secondes au premier chargement). L'écran de chat s'affiche une fois prêt.
+Après le téléchargement, LiteRT-LM initialise le moteur (~10 secondes au premier chargement). Le Hub s'affiche une fois prêt.
 
 ### Backends disponibles
 
@@ -83,7 +113,8 @@ L'application demande à l'usage :
 - **Microphone** — enregistrement vocal
 - **Photos / médias** — sélection d'images et fichiers audio
 
-L'inférence fonctionne hors-ligne. La permission `INTERNET` sert uniquement au chargement des polices Google Fonts (Manrope) au premier affichage.
+L'inférence fonctionne hors-ligne. La permission `INTERNET` sert uniquement au
+**téléchargement du modèle** au premier lancement.
 
 ## 6. Logs et débogage
 
@@ -91,19 +122,21 @@ L'inférence fonctionne hors-ligne. La permission `INTERNET` sert uniquement au 
 # Logs en temps réel
 adb logcat -s LlmEngine
 
-# Effacer les données (force une nouvelle extraction)
+# Effacer les données (force un nouveau téléchargement au prochain lancement)
 adb shell pm clear com.gaetan.localllmapp
 ```
 
 ## Dépannage
 
-### « Manifest des chunks absent dans l'APK »
+### Téléchargement refusé (HTTP 401/403)
 
-L'APK a été compilé sans chunks. Recompilez avec `bash scripts/build_bundled_apk.sh`.
+Le repo HF source est gated. L'URL de téléchargement (`ModelVariant.downloadUrl`) doit
+pointer vers un **miroir public non protégé**. Voir `docs/BUILD.md` §3.
 
-### « Taille incorrecte après assemblage »
+### Téléchargement interrompu
 
-Données corrompues. Dans l'app : **Réinstaller le modèle**, ou :
+La reprise est automatique : relancez/Reprenez depuis l'écran de téléchargement, le fichier
+`.partial` reprend là où il s'était arrêté. En dernier recours :
 
 ```bash
 adb shell pm clear com.gaetan.localllmapp

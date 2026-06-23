@@ -40,57 +40,25 @@ app/src/main/jniLibs/arm64-v8a/
 
 > **Note :** Ce fichier n'est pas versionné dans Git. Relancez le script après un clone frais si vous ciblez le NPU Tensor G5.
 
-## 3. Télécharger le modèle Gemma 4 E2B Q4
+## 3. Modèle — téléchargé au 1er lancement (pas d'étape de build)
 
-### Option A — Script tout-en-un (recommandé)
+Le modèle n'est **plus embarqué dans l'APK** : l'application le télécharge au premier
+lancement depuis l'URL définie dans `app/.../data/ModelVariant.kt` (`downloadUrl`).
 
-```bash
-bash scripts/build_bundled_apk.sh
-```
+- Par défaut, l'URL pointe sur la résolution Hugging Face
+  (`https://huggingface.co/<repo>/resolve/main/<fichier>`).
+- Le repo HF source étant soumis à la **licence Gemma** (gated), fournissez une **URL directe
+  non protégée** (votre propre miroir HF public, un bucket, un CDN) pour un téléchargement
+  sans friction depuis l'app.
 
-Ce script enchaîne : vérification HF → téléchargement → découpage → compilation.
-
-### Option B — Étapes manuelles
-
-#### 3a. Téléchargement
-
-```bash
-bash scripts/download_model.sh
-```
-
-Le modèle est stocké dans `models/gemma-4-E2B-it.litertlm` (~2,4 Go).
-
-**Authentification Hugging Face** (si le dépôt est gated) :
+Pour préparer un tel miroir, récupérez le fichier en local :
 
 ```bash
-export HF_TOKEN=hf_votre_token
-bash scripts/download_model.sh
+export HF_TOKEN=hf_votre_token   # si le repo source est gated
+bash scripts/download_model.sh   # → models/gemma-4-E2B-it.litertlm (~2,4 Go)
 ```
 
-Méthodes supportées (par ordre de préférence) :
-- CLI `hf`
-- `huggingface_hub` (Python)
-- `curl` avec reprise
-
-#### 3b. Découpage en chunks
-
-Android impose une limite de **2 Go** par fichier dans les assets. Le modèle (~2,59 Go) doit être découpé :
-
-```bash
-bash scripts/split_model.sh
-```
-
-Résultat dans `models/chunks/` :
-
-```
-000.bin
-001.bin
-002.bin
-003.bin
-manifest.json
-```
-
-Chaque chunk fait ~700 Mo. Le `manifest.json` décrit l'assemblage au premier lancement.
+…puis ré-hébergez ce fichier à une URL directe et reportez-la dans `ModelVariant.downloadUrl`.
 
 ## 4. Compiler l'APK
 
@@ -98,7 +66,7 @@ Chaque chunk fait ~700 Mo. Le `manifest.json` décrit l'assemblage au premier la
 ./gradlew assembleDebug
 ```
 
-APK généré :
+APK généré (~70 Mo, **sans modèle**) :
 
 ```
 app/build/outputs/apk/debug/app-debug.apk
@@ -126,24 +94,56 @@ Détails des checks, critères PASS/FAIL et dépannage : [docs/QA.md](QA.md).
 
 | Vérification | Commande |
 |--------------|----------|
-| Modèle présent | `ls -lh models/gemma-4-E2B-it.litertlm` |
-| Chunks générés | `ls -lh models/chunks/` |
 | Lib NPU (optionnel) | `ls app/src/main/jniLibs/arm64-v8a/` |
 | APK compilé | `ls -lh app/build/outputs/apk/debug/app-debug.apk` |
 
-Taille attendue du modèle : **2 588 147 712 octets**.
+Le modèle se télécharge dans le stockage interne de l'appareil au 1er lancement
+(`filesDir/models/`) — il n'est ni dans le repo ni dans l'APK.
 
-## 7. Dépannage
+## 7. Build de production
 
-### `Chunks du modèle Gemma 4 E2B Q4 manquants`
+Le build release applique **R8** (minification + `shrinkResources`) et est **signé**.
 
-Lancez `bash scripts/split_model.sh` avant la compilation.
+### Signature (secrets hors dépôt)
 
-### Modèle trop petit après téléchargement
+Les identifiants de signature sont résolus dans cet ordre : propriété Gradle → variable
+d'environnement → `keystore.properties` local (dev). Pour la CI / la publication :
 
-- Acceptez la licence Gemma sur Hugging Face
-- Vérifiez `HF_TOKEN`
-- Supprimez le fichier partiel et relancez `bash scripts/download_model.sh`
+```bash
+export RELEASE_STORE_FILE=/chemin/vers/release.jks
+export RELEASE_STORE_PASSWORD=********
+export RELEASE_KEY_ALIAS=localllmapp
+export RELEASE_KEY_PASSWORD=********
+./gradlew assembleRelease   # ou bundleRelease pour un .aab Play Store
+```
+
+> **Play App Signing recommandé** : publiez un `.aab` ; Google gère la clé d'app, vous ne
+> conservez que la clé d'upload. Ne committez jamais le keystore ni les mots de passe.
+
+### URL du modèle (miroir non-gated)
+
+Le repo HF source est gated (licence Gemma). Pour une distribution publique, hébergez le
+`.litertlm` sur une **URL directe non protégée** et passez-la au build :
+
+```bash
+./gradlew assembleRelease -PMODEL_URL_OVERRIDE=https://votre-miroir/gemma-4-E2B-it.litertlm
+```
+
+L'app vérifie ensuite l'**intégrité SHA-256** du fichier téléchargé (cf. `ModelVariant.sha256`)
+et exige l'**acceptation de la licence Gemma** in-app avant le téléchargement.
+
+### Tests
+
+```bash
+./gradlew testDebugUnitTest
+```
+
+## 7bis. Dépannage
+
+### Téléchargement du modèle refusé (HTTP 401/403) au 1er lancement
+
+Le repo HF source est gated. Buildez avec `-PMODEL_URL_OVERRIDE=<url>` pointant vers un
+miroir public (voir §7), ou définissez la variable d'env `MODEL_URL_OVERRIDE`.
 
 ### Erreur mémoire Gradle
 

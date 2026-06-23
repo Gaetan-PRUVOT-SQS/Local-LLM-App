@@ -1,24 +1,32 @@
+@file:OptIn(androidx.compose.ui.text.ExperimentalTextApi::class)
+
 package com.gaetan.localllmapp.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.gaetan.localllmapp.R
 
+// Polices embarquées (.ttf) — aucune dépendance à Google Play Services.
+// Manrope est une police variable (axe wght) : on règle chaque graisse via variationSettings.
+private fun manrope(weight: FontWeight, axis: Int) =
+    Font(R.font.manrope, weight = weight, variationSettings = FontVariation.Settings(FontVariation.weight(axis)))
+
 val ManropeFamily = FontFamily(
-    Font(R.font.manrope, FontWeight.Normal),
-    Font(R.font.manrope, FontWeight.Medium),
-    Font(R.font.manrope, FontWeight.SemiBold),
-    Font(R.font.manrope, FontWeight.Bold),
-    Font(R.font.manrope, FontWeight.ExtraBold),
+    manrope(FontWeight.Normal, 400),
+    manrope(FontWeight.Medium, 500),
+    manrope(FontWeight.SemiBold, 600),
+    manrope(FontWeight.Bold, 700),
+    manrope(FontWeight.ExtraBold, 800),
 )
 
 val JetBrainsMonoFamily = FontFamily(
-    Font(R.font.jetbrains_mono, FontWeight.Normal),
-    Font(R.font.jetbrains_mono, FontWeight.Medium),
+    Font(R.font.jetbrains_mono_regular, FontWeight.Normal),
+    Font(R.font.jetbrains_mono_medium, FontWeight.Medium),
 )
 
 val GemmaTypography = Typography(

@@ -1,5 +1,6 @@
 *.iml
 .gradle/
+.kotlin/
 /local.properties
 /.idea/
 .DS_Store
@@ -12,6 +13,8 @@
 *.aab
 *.keystore
 *.jks
+/keystore/
+keystore.properties
 
 # NPU dispatch lib — fetched via scripts/fetch_npu_libs.sh
 app/src/main/jniLibs/arm64-v8a/libLiteRtDispatch_GoogleTensor.so

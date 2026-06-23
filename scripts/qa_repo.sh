@@ -44,24 +44,22 @@ if [[ -f gradle/wrapper/gradle-wrapper.jar ]]; then
   check "gradlew --version" ./gradlew --version
 fi
 
-if [[ -f models/chunks/manifest.json ]]; then
-  if [[ ! -f local.properties ]]; then
-    echo "local.properties absent — bootstrap SDK..."
-    python3 "$ROOT/scripts/bootstrap_repo.py"
-  fi
-  if [[ ! -f local.properties ]]; then
-    echo "FAIL: assembleDebug — Android SDK non configuré"
-    echo "  Créez local.properties : sdk.dir=$HOME/Library/Android/sdk"
-    echo "  Ou : export ANDROID_HOME=$HOME/Library/Android/sdk"
-    FAIL=$((FAIL + 1))
-  elif ./gradlew assembleDebug; then
-    check "assembleDebug" test -f app/build/outputs/apk/debug/app-debug.apk
-  else
-    echo "FAIL: assembleDebug"
-    FAIL=$((FAIL + 1))
-  fi
+# Le modèle est téléchargé au 1er lancement (plus de chunks embarqués) :
+# l'APK compile donc directement, sans préparation de modèle.
+if [[ ! -f local.properties ]]; then
+  echo "local.properties absent — bootstrap SDK..."
+  python3 "$ROOT/scripts/bootstrap_repo.py"
+fi
+if [[ ! -f local.properties ]]; then
+  echo "FAIL: assembleDebug — Android SDK non configuré"
+  echo "  Créez local.properties : sdk.dir=$HOME/Library/Android/sdk"
+  echo "  Ou : export ANDROID_HOME=$HOME/Library/Android/sdk"
+  FAIL=$((FAIL + 1))
+elif ./gradlew assembleDebug; then
+  check "assembleDebug" test -f app/build/outputs/apk/debug/app-debug.apk
 else
-  echo "SKIP: assembleDebug (models/chunks/manifest.json absent — normal pour clone frais)"
+  echo "FAIL: assembleDebug"
+  FAIL=$((FAIL + 1))
 fi
 
 echo ""
