@@ -1,5 +1,6 @@
 package com.gaetan.localllmapp.ui.settings
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -31,9 +32,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import com.gaetan.localllmapp.BuildConfig
 import com.gaetan.localllmapp.llm.BackendChoice
 import com.gaetan.localllmapp.ui.AppUiState
@@ -144,12 +147,23 @@ fun SettingsScreen(
                         .padding(15.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
+                    val ctx = LocalContext.current
                     AboutRow("Version", BuildConfig.VERSION_NAME)
                     AboutRow("Exécution", "100% locale · hors‑ligne")
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         Icon(Icons.Default.Lock, null, tint = GemmaColors.Success, modifier = Modifier.size(13.dp))
                         Text("Aucune donnée ne quitte l'appareil pendant l'inférence", fontFamily = ManropeFamily, fontSize = 11.5.sp, color = GemmaColors.TextMuted)
                     }
+                    AboutLink("Politique de confidentialité") {
+                        ctx.startActivity(Intent(Intent.ACTION_VIEW, "https://github.com/Gaetan-PRUVOT-SQS/Local-LLM-App/blob/main/PRIVACY.md".toUri()))
+                    }
+                    AboutLink("Licences open source") {
+                        ctx.startActivity(Intent(Intent.ACTION_VIEW, "https://github.com/Gaetan-PRUVOT-SQS/Local-LLM-App/blob/main/THIRD_PARTY_NOTICES.md".toUri()))
+                    }
+                    Text(
+                        "Gemma est une marque de Google LLC. Application indépendante, non affiliée à Google.",
+                        fontFamily = ManropeFamily, fontSize = 10.5.sp, lineHeight = 15.sp, color = GemmaColors.TextStatus,
+                    )
                 }
                 Spacer(Modifier.height(20.dp))
             }
@@ -219,4 +233,20 @@ private fun AboutRow(label: String, value: String) {
         Text(label, fontFamily = ManropeFamily, fontSize = 13.sp, color = GemmaColors.TextMuted)
         Text(value, fontFamily = ManropeFamily, fontWeight = FontWeight.SemiBold, fontSize = 13.sp, color = GemmaColors.TextSecondary)
     }
+}
+
+@Composable
+private fun AboutLink(label: String, onClick: () -> Unit) {
+    Text(
+        label,
+        fontFamily = ManropeFamily,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 13.sp,
+        color = GemmaColors.AccentPurpleSoft,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .clickable(onClick = onClick)
+            .padding(vertical = 2.dp),
+    )
 }

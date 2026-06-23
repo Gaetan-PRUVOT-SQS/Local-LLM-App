@@ -88,7 +88,7 @@ fun OnboardingCompatibilityScreen(
                 GemmaFloatingLogo(size = 52)
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    "Ton téléphone est prêt",
+                    "Votre téléphone est prêt",
                     fontFamily = ManropeFamily,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 23.sp,

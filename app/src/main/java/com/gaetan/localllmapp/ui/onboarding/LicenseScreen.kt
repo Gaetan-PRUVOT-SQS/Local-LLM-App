@@ -70,7 +70,7 @@ fun LicenseScreen(
                 )
                 Text(
                     "Le modèle Gemma 4 E2B est fourni par Google sous les Gemma Terms of Use. " +
-                        "En téléchargeant et en utilisant ce modèle, tu acceptes ces conditions, " +
+                        "En téléchargeant et en utilisant ce modèle, vous acceptez ces conditions, " +
                         "y compris la politique d'utilisation interdite.",
                     fontFamily = ManropeFamily, fontSize = 14.sp, lineHeight = 21.sp, color = GemmaColors.TextMuted,
                     modifier = Modifier.padding(top = 12.dp),
@@ -87,7 +87,7 @@ fun LicenseScreen(
 
                 Spacer(Modifier.height(18.dp))
                 Text(
-                    "Le modèle s'exécute ensuite entièrement sur ton appareil. Aucune donnée " +
+                    "Le modèle s'exécute ensuite entièrement sur votre appareil. Aucune donnée " +
                         "d'inférence n'est envoyée à Google ni à un tiers.",
                     fontFamily = ManropeFamily, fontSize = 12.5.sp, lineHeight = 18.sp, color = GemmaColors.TextStatus,
                 )

@@ -245,11 +245,11 @@ fun WelcomeContent(
         }
 
         Text(
-            text = "Salut, moi c'est Gemma.",
+            text = "Bonjour, je suis Gemma.",
             style = androidx.compose.material3.MaterialTheme.typography.headlineLarge,
         )
         Text(
-            text = "Je tourne entièrement sur ton téléphone. Aucune donnée ne quitte ton appareil.",
+            text = "Je tourne entièrement sur votre téléphone. Aucune donnée ne quitte votre appareil.",
             style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(top = 11.dp),
         )
@@ -275,7 +275,7 @@ fun WelcomeContent(
                     iconTint = GemmaColors.AccentPurpleSoft,
                     iconBg = Color(0x266E78FF),
                     title = "Analyse une photo",
-                    subtitle = "Décris ou explique une image, hors‑ligne",
+                    subtitle = "Décrivez ou expliquez une image, hors‑ligne",
                     modifier = Modifier.weight(1f),
                     onClick = { onSuggestionClick("Décris cette image en détail.") },
                 )
@@ -553,7 +553,7 @@ fun GemmaInputBar(
 
         if (showDisclaimer) {
             Text(
-                text = "Gemma peut se tromper. Tout reste sur ton appareil.",
+                text = "Gemma peut se tromper. Tout reste sur votre appareil.",
                 style = androidx.compose.material3.MaterialTheme.typography.labelSmall,
                 modifier = Modifier
                     .fillMaxWidth()

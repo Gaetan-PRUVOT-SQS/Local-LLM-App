@@ -271,7 +271,7 @@ fun ChatScreen(
                 GemmaInputBar(
                     value = state.inputText,
                     onValueChange = onInputChange,
-                    placeholder = if (showWelcome) "Dis bonjour à Gemma…" else "Écris à Gemma…",
+                    placeholder = if (showWelcome) "Dites bonjour à Gemma…" else "Écrivez à Gemma…",
                     onSend = onSend,
                     onAddImage = {
                         requestMediaPermissions()
@@ -489,9 +489,9 @@ private fun ChatWelcome(onSuggestionClick: (String) -> Unit, modifier: Modifier 
     ) {
         com.gaetan.localllmapp.ui.components.GemmaFloatingLogo(size = 56)
         Spacer(Modifier.height(18.dp))
-        Text("Salut, moi c'est Gemma.", fontFamily = ManropeFamily, fontWeight = FontWeight.ExtraBold, fontSize = 24.sp, color = GemmaColors.TextPrimary)
+        Text("Bonjour, je suis Gemma.", fontFamily = ManropeFamily, fontWeight = FontWeight.ExtraBold, fontSize = 24.sp, color = GemmaColors.TextPrimary)
         Text(
-            "Je tourne entièrement sur ton téléphone. Pour commencer, dis‑moi simplement bonjour.",
+            "Je tourne entièrement sur votre téléphone. Pour commencer, dites‑moi simplement bonjour.",
             fontFamily = ManropeFamily,
             fontSize = 14.sp,
             lineHeight = 21.sp,
@@ -704,7 +704,7 @@ private fun SkillsSheet(
                 }
             }
             Text(
-                "Choisis un style appliqué à tes prochains messages.",
+                "Choisissez un style appliqué à vos prochains messages.",
                 fontFamily = ManropeFamily, fontSize = 12.sp, color = GemmaColors.TextMuted,
                 modifier = Modifier.padding(bottom = 4.dp),
             )

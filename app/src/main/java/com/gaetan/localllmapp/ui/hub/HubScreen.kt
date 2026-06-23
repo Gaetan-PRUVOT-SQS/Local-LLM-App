@@ -108,7 +108,7 @@ fun HubScreen(
                 Spacer(Modifier.height(10.dp))
                 Text("Bonjour.", fontFamily = ManropeFamily, fontWeight = FontWeight.ExtraBold, fontSize = 25.sp, color = GemmaColors.TextPrimary)
                 Text(
-                    "Que veux‑tu faire en local aujourd'hui ?",
+                    "Que voulez‑vous faire en local aujourd'hui ?",
                     fontFamily = ManropeFamily,
                     fontSize = 13.5.sp,
                     color = GemmaColors.TextMuted,
@@ -119,12 +119,12 @@ fun HubScreen(
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(11.dp)) {
                     HubCard(
                         icon = Icons.AutoMirrored.Filled.Chat, iconTint = GemmaColors.AccentPurpleSoft, iconBg = Color(0x266E78FF),
-                        title = "Discuter", subtitle = "Pose n'importe quelle question", badge = HubBadge.OFFLINE,
+                        title = "Discuter", subtitle = "Posez n'importe quelle question", badge = HubBadge.OFFLINE,
                         modifier = Modifier.weight(1f), onClick = onNewChat,
                     )
                     HubCard(
                         icon = Icons.Default.Image, iconTint = GemmaColors.CameraPurpleSoft, iconBg = Color(0x29A78BFA),
-                        title = "Analyser", subtitle = "Décris ou explique une photo", badge = HubBadge.OFFLINE,
+                        title = "Analyser", subtitle = "Décrivez ou expliquez une photo", badge = HubBadge.OFFLINE,
                         modifier = Modifier.weight(1f), onClick = onAnalyse,
                     )
                 }
@@ -164,7 +164,7 @@ fun HubScreen(
                 Spacer(Modifier.height(10.dp))
                 if (recent.isEmpty()) {
                     Text(
-                        "Aucune discussion pour l'instant. Lance‑toi !",
+                        "Aucune discussion pour l'instant. Lancez‑vous !",
                         fontFamily = ManropeFamily,
                         fontSize = 12.sp,
                         color = GemmaColors.TextStatus,

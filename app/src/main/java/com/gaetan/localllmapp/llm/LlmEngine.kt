@@ -64,7 +64,7 @@ class LlmEngine(
                     conversation = newEngine.createConversation(
                         ConversationConfig(
                             systemInstruction = com.google.ai.edge.litertlm.Contents.of(
-                                "Tu es Gemma, un assistant IA utile et concis. Réponds en français sauf demande contraire.",
+                                "Tu es Gemma, un assistant IA utile et concis. Réponds en français et vouvoie toujours l'utilisateur, sauf demande contraire.",
                             ),
                             samplerConfig = SamplerConfig(
                                 topK = 40,

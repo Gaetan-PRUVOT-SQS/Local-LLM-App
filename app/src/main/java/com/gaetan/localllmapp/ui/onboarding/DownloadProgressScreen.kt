@@ -157,8 +157,8 @@ fun DownloadProgressScreen(
                 ) {
                     Icon(Icons.Default.Info, null, tint = GemmaColors.AccentPurpleSoft, modifier = Modifier.size(18.dp))
                     Text(
-                        if (importing) "Copie du fichier depuis le stockage de l'appareil. Garde l'app ouverte."
-                        else "Garde l'app ouverte. La connexion peut couper — le téléchargement reprendra tout seul.",
+                        if (importing) "Copie du fichier depuis le stockage de l'appareil. Gardez l'app ouverte."
+                        else "Gardez l'app ouverte. La connexion peut couper — le téléchargement reprendra tout seul.",
                         fontFamily = ManropeFamily,
                         fontSize = 11.5.sp,
                         lineHeight = 16.sp,

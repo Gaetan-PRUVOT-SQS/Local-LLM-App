@@ -126,8 +126,12 @@ Le modèle n'est **ni versionné ni embarqué dans l'APK**. Au 1er lancement, l'
 ou l'**importe** depuis un fichier local. Sur Pixel Tensor G5, l'accélération NPU utilise
 `libLiteRtDispatch_GoogleTensor.so` (via `bash scripts/fetch_npu_libs.sh`, non versionnée).
 
-## Licence
+## Confidentialité & licences
 
-- **Code source** de cette application : [Apache-2.0](LICENSE)
-- **Modèle Gemma 4 E2B** : [Gemma Terms of Use](https://ai.google.dev/gemma/terms) — téléchargement via [Hugging Face](https://huggingface.co/litert-community/gemma-4-E2B-it-litert-lm) après acceptation de la licence
-- **LiteRT-LM** : [Apache-2.0](https://github.com/google-ai-edge/LiteRT-LM)
+- **Confidentialité** : [PRIVACY.md](PRIVACY.md) — traitement 100 % local, aucune donnée transmise.
+- **Notices tierces** : [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) — polices (SIL OFL-1.1), bibliothèques (Apache-2.0).
+- **Code source** : [Apache-2.0](LICENSE).
+- **Modèle Gemma 4 E2B** : [Gemma Terms of Use](https://ai.google.dev/gemma/terms) — acceptés in-app avant le téléchargement.
+- **LiteRT-LM** : [Apache-2.0](https://github.com/google-ai-edge/LiteRT-LM).
+
+> *Gemma* est une marque de Google LLC. Application indépendante, non affiliée à Google.
