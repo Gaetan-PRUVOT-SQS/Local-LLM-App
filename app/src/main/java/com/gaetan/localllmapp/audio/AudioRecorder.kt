@@ -1,4 +1,4 @@
-package com.gaetan.gemmchat.audio
+package com.gaetan.localllmapp.audio
 
 import android.content.Context
 import android.media.MediaRecorder

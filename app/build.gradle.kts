@@ -15,11 +15,11 @@ val bundledChunksDir = rootProject.layout.projectDirectory.dir("models/chunks").
 val bundledManifest = rootProject.layout.projectDirectory.file("models/chunks/manifest.json").asFile
 
 android {
-    namespace = "com.gaetan.gemmchat"
+    namespace = "com.gaetan.localllmapp"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.gaetan.gemmchat"
+        applicationId = "com.gaetan.localllmapp"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

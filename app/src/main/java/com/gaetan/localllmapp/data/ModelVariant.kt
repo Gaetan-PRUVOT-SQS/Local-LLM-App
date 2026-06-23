@@ -1,4 +1,4 @@
-package com.gaetan.gemmchat.data
+package com.gaetan.localllmapp.data
 
 object BundledModel {
     const val FILE_NAME = "gemma-4-E2B-it.litertlm"

@@ -1,4 +1,4 @@
-package com.gaetan.gemmchat.ui.components
+package com.gaetan.localllmapp.ui.components
 
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -54,11 +54,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gaetan.gemmchat.R
-import com.gaetan.gemmchat.llm.BackendChoice
-import com.gaetan.gemmchat.ui.theme.GemmaColors
-import com.gaetan.gemmchat.ui.theme.JetBrainsMonoFamily
-import com.gaetan.gemmchat.ui.theme.ManropeFamily
+import com.gaetan.localllmapp.R
+import com.gaetan.localllmapp.llm.BackendChoice
+import com.gaetan.localllmapp.ui.theme.GemmaColors
+import com.gaetan.localllmapp.ui.theme.JetBrainsMonoFamily
+import com.gaetan.localllmapp.ui.theme.ManropeFamily
 
 @Composable
 fun GemmaLogo(

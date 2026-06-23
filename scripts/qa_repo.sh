@@ -25,7 +25,7 @@ check() {
   fi
 }
 
-echo "=== QA gemma-4-e2b-android ==="
+echo "=== QA Local-LLM-App ==="
 
 check "LICENSE" test -f LICENSE
 check "gradle-wrapper.jar" test -f gradle/wrapper/gradle-wrapper.jar

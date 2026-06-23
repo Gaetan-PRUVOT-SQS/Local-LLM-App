@@ -1,11 +1,11 @@
-package com.gaetan.gemmchat.ui
+package com.gaetan.localllmapp.ui
 
 import android.net.Uri
-import com.gaetan.gemmchat.data.ExtractProgress
-import com.gaetan.gemmchat.data.ModelVariant
-import com.gaetan.gemmchat.device.TensorGeneration
-import com.gaetan.gemmchat.llm.BackendChoice
-import com.gaetan.gemmchat.llm.EngineMode
+import com.gaetan.localllmapp.data.ExtractProgress
+import com.gaetan.localllmapp.data.ModelVariant
+import com.gaetan.localllmapp.device.TensorGeneration
+import com.gaetan.localllmapp.llm.BackendChoice
+import com.gaetan.localllmapp.llm.EngineMode
 
 enum class AppScreen {
     LOADING,

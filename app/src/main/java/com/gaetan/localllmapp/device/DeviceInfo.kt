@@ -1,7 +1,7 @@
-package com.gaetan.gemmchat.device
+package com.gaetan.localllmapp.device
 
 import android.os.Build
-import com.gaetan.gemmchat.data.ModelVariant
+import com.gaetan.localllmapp.data.ModelVariant
 
 enum class TensorGeneration {
     NONE,

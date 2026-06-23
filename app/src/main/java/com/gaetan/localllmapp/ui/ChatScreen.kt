@@ -1,4 +1,4 @@
-package com.gaetan.gemmchat.ui
+package com.gaetan.localllmapp.ui
 
 import android.Manifest
 import android.net.Uri
@@ -40,16 +40,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.gaetan.gemmchat.llm.BackendChoice
-import com.gaetan.gemmchat.llm.EngineMode
-import com.gaetan.gemmchat.ui.components.GemmaHeader
-import com.gaetan.gemmchat.ui.components.GemmaInputBar
-import com.gaetan.gemmchat.ui.components.GemmaLogo
-import com.gaetan.gemmchat.ui.components.GemmaScreenBackground
-import com.gaetan.gemmchat.ui.components.StreamingIndicator
-import com.gaetan.gemmchat.ui.components.WelcomeContent
-import com.gaetan.gemmchat.ui.theme.GemmaColors
-import com.gaetan.gemmchat.ui.theme.ManropeFamily
+import com.gaetan.localllmapp.llm.BackendChoice
+import com.gaetan.localllmapp.llm.EngineMode
+import com.gaetan.localllmapp.ui.components.GemmaHeader
+import com.gaetan.localllmapp.ui.components.GemmaInputBar
+import com.gaetan.localllmapp.ui.components.GemmaLogo
+import com.gaetan.localllmapp.ui.components.GemmaScreenBackground
+import com.gaetan.localllmapp.ui.components.StreamingIndicator
+import com.gaetan.localllmapp.ui.components.WelcomeContent
+import com.gaetan.localllmapp.ui.theme.GemmaColors
+import com.gaetan.localllmapp.ui.theme.ManropeFamily
 
 @Composable
 fun ChatScreen(

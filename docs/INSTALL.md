@@ -37,7 +37,7 @@ Options utiles :
 adb install -r -d app/build/outputs/apk/debug/app-debug.apk
 
 # Désinstaller avant réinstallation propre
-adb uninstall com.gaetan.gemmchat
+adb uninstall com.gaetan.localllmapp
 adb install app/build/outputs/apk/debug/app-debug.apk
 ```
 
@@ -92,7 +92,7 @@ L'inférence fonctionne hors-ligne. La permission `INTERNET` sert uniquement au 
 adb logcat -s LlmEngine
 
 # Effacer les données (force une nouvelle extraction)
-adb shell pm clear com.gaetan.gemmchat
+adb shell pm clear com.gaetan.localllmapp
 ```
 
 ## Dépannage
@@ -106,7 +106,7 @@ L'APK a été compilé sans chunks. Recompilez avec `bash scripts/build_bundled_
 Données corrompues. Dans l'app : **Réinstaller le modèle**, ou :
 
 ```bash
-adb shell pm clear com.gaetan.gemmchat
+adb shell pm clear com.gaetan.localllmapp
 ```
 
 Puis relancez l'application.

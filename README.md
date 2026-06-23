@@ -27,8 +27,8 @@ Pour le modèle Gemma, acceptez la [licence Gemma](https://huggingface.co/litert
 ## Démarrage rapide
 
 ```bash
-git clone <url-du-repo> gemma-4-e2b-android
-cd gemma-4-e2b-android
+git clone <url-du-repo> Local-LLM-App
+cd Local-LLM-App
 
 # Première fois : wrapper Gradle + git local
 bash scripts/setup_repo.sh   # télécharge/copie gradle-wrapper.jar + git init
@@ -55,7 +55,7 @@ Consultez la documentation détaillée :
 ## Architecture du projet
 
 ```
-gemma-4-e2b-android/
+Local-LLM-App/
 ├── app/                    # Module Android (Kotlin + Compose)
 ├── models/                 # Modèle .litertlm (local, non versionné)
 ├── scripts/                # Téléchargement, découpage, build

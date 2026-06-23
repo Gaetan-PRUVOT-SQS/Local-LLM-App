@@ -1,4 +1,4 @@
-package com.gaetan.gemmchat.ui.theme
+package com.gaetan.localllmapp.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.gaetan.gemmchat.R
+import com.gaetan.localllmapp.R
 
 val ManropeFamily = FontFamily(
     Font(R.font.manrope, FontWeight.Normal),

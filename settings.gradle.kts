@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "GemmaChat"
+rootProject.name = "Local-LLM-App"
 include(":app")

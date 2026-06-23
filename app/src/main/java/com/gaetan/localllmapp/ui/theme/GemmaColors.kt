@@ -1,4 +1,4 @@
-package com.gaetan.gemmchat.ui.theme
+package com.gaetan.localllmapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

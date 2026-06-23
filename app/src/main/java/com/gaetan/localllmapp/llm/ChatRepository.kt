@@ -1,4 +1,4 @@
-package com.gaetan.gemmchat.llm
+package com.gaetan.localllmapp.llm
 
 import android.content.Context
 import android.net.Uri

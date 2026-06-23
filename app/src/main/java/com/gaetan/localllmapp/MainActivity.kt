@@ -1,4 +1,4 @@
-package com.gaetan.gemmchat
+package com.gaetan.localllmapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,12 +10,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.gaetan.gemmchat.ui.AppScreen
-import com.gaetan.gemmchat.ui.AppViewModel
-import com.gaetan.gemmchat.ui.ChatScreen
-import com.gaetan.gemmchat.ui.LoadingScreen
-import com.gaetan.gemmchat.ui.theme.GemmaChatTheme
-import com.gaetan.gemmchat.ui.theme.GemmaColors
+import com.gaetan.localllmapp.ui.AppScreen
+import com.gaetan.localllmapp.ui.AppViewModel
+import com.gaetan.localllmapp.ui.ChatScreen
+import com.gaetan.localllmapp.ui.LoadingScreen
+import com.gaetan.localllmapp.ui.theme.LocalLLMAppTheme
+import com.gaetan.localllmapp.ui.theme.GemmaColors
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
             val appViewModel: AppViewModel = viewModel()
             val state by appViewModel.uiState.collectAsState()
 
-            GemmaChatTheme {
+            LocalLLMAppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = GemmaColors.Background,

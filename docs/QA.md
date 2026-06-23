@@ -27,7 +27,7 @@ Ce test ne remplace pas les tests manuels sur appareil (chat, multimodal, NPU). 
 ### QA minimale (clone frais)
 
 ```bash
-cd gemma-4-e2b-android
+cd Local-LLM-App
 bash scripts/setup_repo.sh
 bash scripts/qa_repo.sh
 ```
@@ -37,7 +37,7 @@ Résultat attendu : **14 PASS, 0 FAIL**, avec `SKIP: assembleDebug` (normal sans
 ### QA complète (avec compilation APK)
 
 ```bash
-cd gemma-4-e2b-android
+cd Local-LLM-App
 bash scripts/setup_repo.sh
 bash scripts/fetch_npu_libs.sh
 

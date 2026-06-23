@@ -1,4 +1,4 @@
-package com.gaetan.gemmchat.ui.theme
+package com.gaetan.localllmapp.ui.theme
 
 import android.app.Activity
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +27,7 @@ private val GemmaDarkScheme = darkColorScheme(
 )
 
 @Composable
-fun GemmaChatTheme(content: @Composable () -> Unit) {
+fun LocalLLMAppTheme(content: @Composable () -> Unit) {
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {

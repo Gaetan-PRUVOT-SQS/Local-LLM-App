@@ -1,4 +1,4 @@
-package com.gaetan.gemmchat.ui
+package com.gaetan.localllmapp.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,10 +26,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gaetan.gemmchat.ui.components.GemmaLogo
-import com.gaetan.gemmchat.ui.components.GemmaScreenBackground
-import com.gaetan.gemmchat.ui.theme.GemmaColors
-import com.gaetan.gemmchat.ui.theme.ManropeFamily
+import com.gaetan.localllmapp.ui.components.GemmaLogo
+import com.gaetan.localllmapp.ui.components.GemmaScreenBackground
+import com.gaetan.localllmapp.ui.theme.GemmaColors
+import com.gaetan.localllmapp.ui.theme.ManropeFamily
 
 @Composable
 fun LoadingScreen(

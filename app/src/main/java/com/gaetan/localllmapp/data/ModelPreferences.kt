@@ -1,4 +1,4 @@
-package com.gaetan.gemmchat.data
+package com.gaetan.localllmapp.data
 
 import android.content.Context
 

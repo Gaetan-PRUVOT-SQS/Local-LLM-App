@@ -1,8 +1,8 @@
-package com.gaetan.gemmchat.llm
+package com.gaetan.localllmapp.llm
 
 import android.content.Context
 import android.util.Log
-import com.gaetan.gemmchat.data.ModelVariant
+import com.gaetan.localllmapp.data.ModelVariant
 import com.google.ai.edge.litertlm.Backend
 import com.google.ai.edge.litertlm.Conversation
 import com.google.ai.edge.litertlm.ConversationConfig
