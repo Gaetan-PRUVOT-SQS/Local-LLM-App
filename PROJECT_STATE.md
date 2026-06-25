@@ -8,8 +8,8 @@ Application **Android** de chat avec **Gemma 4 E2B**, fonctionnant **100 % en lo
 
 - **Package** : `com.gaetan.gemmchat`
 - **Dossier local** : `~/Desktop/gemma-chat` (Android Studio / Gradle)
-- **Repo GitHub** : https://github.com/Gaetan-PRUVOT-SQS/Local-LLM-App (branche `main`)
-- **Release** : v1.0.0 avec `GemmaChat-v1.0.0.apk` (~72 Mo, debug-signed)
+- **Repo GitHub** : https://github.com/Gaetan-PRUVOT-SQS/Local-LLM-App (branche `main`, HEAD `fe05f87`)
+- **Release** : v1.0.0 (tag sur `fe05f87`) avec `GemmaChat-v1.0.0.apk` (~72 Mo, debug-signed) — APK rebuild incluant le préprocesseur maths + fix scroll, libs GPU/NPU embarquées
 - **Cible testée** : Pixel 8 Pro (Tensor G3 → backend GPU), Android 16, arm64-v8a, minSdk 26
 
 > ⚠️ Le repo s'appelle `Local-LLM-App` (ancien nom) mais contient désormais GemmaChat. Une autre app `com.gaetan.localllmapp` (plus riche : onboarding/skills) a été abandonnée/supprimée au profit de celle-ci.
@@ -102,6 +102,7 @@ app/src/main/java/com/gaetan/gemmchat/
 - **Audit QA (ISTQB)** → défauts corrigés : I/O hors thread UI (DEF-1), stop avant 1er token (DEF-2), tiroir se ferme à la suppression courante (DEF-3), image persistée localement (DEF-4), audio en filesDir (DEF-5), entrée plafonnée 8000 car. (DEF-6). 0 crash sur 2 campagnes.
 - **Audio** : bug AAC/miniaudio → réécrit en WAV.
 - **Distribution** : modèle sorti de l'APK (2,6 Go → 72 Mo), download runtime, repo + release mis à jour, licence Apache 2.0.
+- **Sync repo + release (2026-06-25)** : préprocesseur maths/LaTeX + fix auto-scroll streaming poussés sur `main` (commit `fe05f87`), tag `v1.0.0` déplacé sur ce commit et asset `GemmaChat-v1.0.0.apk` rebuild/remplacé. Version inchangée (`versionName 1.0.0`).
 
 ## 8. Build & run
 
