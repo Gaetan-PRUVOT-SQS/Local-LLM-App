@@ -66,3 +66,10 @@ app/src/main/java/com/gaetan/gemmchat/
 - **Vidéo non supportée** : le modèle traite le texte, l'image et l'audio uniquement.
 - Audio : LiteRT‑LM décode via miniaudio → format **WAV/FLAC/MP3** requis (l'app enregistre en WAV).
 - La variante NPU (Tensor G5) n'est pas embarquée par défaut (seul le Q4 GPU/CPU l'est).
+
+## Licence
+
+Distribué sous licence **Apache 2.0** — voir [LICENSE](LICENSE).
+
+Le modèle Gemma et les bibliothèques tierces (LiteRT‑LM, polices) restent soumis à
+leurs licences respectives (Gemma Terms of Use, Apache 2.0, OFL).
