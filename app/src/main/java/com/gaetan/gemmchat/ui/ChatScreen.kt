@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,8 +39,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -136,18 +139,36 @@ fun ChatScreen(
         }
     }
 
-    // Auto-scroll seulement si l'utilisateur est déjà en bas (sinon on ne le
-    // « ramène » pas de force pendant qu'il lit/remonte).
+    // Vrai bas : plus rien à scroller vers le bas (fiable même quand le dernier
+    // message en streaming est plus haut que l'écran).
     val isAtBottom by remember {
-        derivedStateOf {
-            val info = listState.layoutInfo
-            val last = info.visibleItemsInfo.lastOrNull()
-            last == null || last.index >= info.totalItemsCount - 2
+        derivedStateOf { !listState.canScrollForward }
+    }
+
+    // Suivi auto activé par défaut ; mis en pause si l'utilisateur attrape la
+    // liste pour remonter, réactivé quand il revient en bas / lance une génération.
+    var autoFollow by remember { mutableStateOf(true) }
+
+    // Un drag utilisateur (et non un scroll programmatique) suspend le suivi.
+    LaunchedEffect(listState) {
+        listState.interactionSource.interactions.collect { interaction ->
+            if (interaction is DragInteraction.Start) autoFollow = false
         }
     }
-    LaunchedEffect(state.messages.size, state.messages.lastOrNull()?.text) {
-        if (state.messages.isNotEmpty() && isAtBottom) {
-            listState.animateScrollToItem(state.messages.lastIndex)
+    // Revenu en bas → on re-suit. Nouvelle génération → on re-suit.
+    LaunchedEffect(isAtBottom) { if (isAtBottom) autoFollow = true }
+    LaunchedEffect(state.isGenerating) { if (state.isGenerating) autoFollow = true }
+
+    // Colle au bas à chaque token : on vise le DERNIER item lazy (le Spacer de
+    // fin) ; Compose clampe au max de scroll = bas réel du contenu. scrollToItem
+    // (non animé) pour rester fluide token par token. La clé `isGenerating`
+    // déclenche un dernier snap à la finalisation : la fin de génération ajoute
+    // la rangée « Copier / horodatage » sous le message, qui sinon resterait
+    // sous le pli (texte/taille inchangés → l'effet ne se redéclencherait pas).
+    LaunchedEffect(state.messages.size, state.messages.lastOrNull()?.text, state.isGenerating, autoFollow) {
+        if (autoFollow && state.messages.isNotEmpty()) {
+            val lastIndex = (listState.layoutInfo.totalItemsCount - 1).coerceAtLeast(0)
+            listState.scrollToItem(lastIndex)
         }
     }
 
@@ -232,7 +253,12 @@ fun ChatScreen(
                                 .background(GemmaColors.SurfaceBubble)
                                 .border(1.dp, GemmaColors.BorderLight, CircleShape)
                                 .clickable(onClickLabel = "Descendre en bas") {
-                                    scope.launch { listState.animateScrollToItem(state.messages.lastIndex) }
+                                    autoFollow = true
+                                    scope.launch {
+                                        val lastIndex = (listState.layoutInfo.totalItemsCount - 1)
+                                            .coerceAtLeast(0)
+                                        listState.animateScrollToItem(lastIndex)
+                                    }
                                 },
                             contentAlignment = Alignment.Center,
                         ) {

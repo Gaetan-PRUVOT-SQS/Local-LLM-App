@@ -74,6 +74,27 @@ app/src/main/java/com/gaetan/gemmchat/
 
 ## 7. Travaux réalisés (historique)
 
+- **Fix auto-scroll streaming** : la réponse en streaming est un seul item de
+  `LazyColumn` qui grandit au-delà de l'écran ; l'ancien `animateScrollToItem(messages.lastIndex)`
+  visait le mauvais item (décalage du `Spacer` de tête) et alignait son *haut*, laissant
+  les nouveaux tokens hors champ → on devait scroller pour suivre. Corrigé dans
+  `ui/ChatScreen.kt` : suivi du vrai bas via `scrollToItem(totalItemsCount-1)` (clamp Compose),
+  détection de bas par `canScrollForward`, et pause du suivi seulement sur drag utilisateur
+  (`DragInteraction.Start` → `autoFollow=false`, réactivé au retour en bas / nouvelle génération /
+  tap ↓). Audit QA ISTQB sur device (8 cas : court, long, pause scroll-up, ↓, Stop, rotation
+  paysage, font 1.5, fin normale) → **DEF-A** trouvé et corrigé : à la finalisation, la rangée
+  « Copier / horodatage » était ajoutée *après* le dernier snap → vue laissée ~1 rangée trop
+  haut (↓ affiché, dernière ligne masquée) ; fix = clé `state.isGenerating` ajoutée au
+  `LaunchedEffect` de suivi (snap final, gardé par `autoFollow` pour ne pas rattraper un
+  lecteur). 0 crash sur toute la campagne.
+- **Rendu LaTeX/maths** : le modèle émet souvent du LaTeX (`$\text{O}_2$`, `\(a \times b\)`,
+  indices/exposants, notes `[^1]`) que le markdown maison affichait en brut. Nouveau
+  préprocesseur **pur** `ui/components/MarkdownPreprocess.kt` (`cleanupMath`) appelé avant le
+  parsing inline : strip des délimiteurs `$…$`/`\(…\)`, `\text{}`/commandes `\cmd{arg}→arg`,
+  symboles → Unicode (× → ÷ ≤ ≥ α…), indices/exposants → Unicode (O₂, x²). Conservatif :
+  `$…$` sans marqueur LaTeX (montants « 5$ ») et délimiteur non fermé (streaming) laissés
+  littéraux. Couvert par **15 tests unitaires JVM** (`src/test/.../MarkdownPreprocessTest.kt`,
+  `junit:4.13.2`) — tous verts. Vérifié sur device (CO₂, C₆H₁₂O₆, H₂O propres, 0 artefact brut).
 - **Features** : historique multi-conversations + tiroir + persistance.
 - **Perf** : bundling sampler GPU OpenCL (patchelf) → ~2×.
 - **Audit UX** → corrigé : rendu markdown, sélection/copie, bouton Stop, scroll conditionnel, clé de liste stable, confirmation suppression, cibles tactiles, contrastes WCAG AA, labels TalkBack, messages d'erreur, horodatage, disclaimer persistant.
@@ -88,6 +109,7 @@ app/src/main/java/com/gaetan/gemmchat/
 # Prérequis : Android SDK (local.properties: sdk.dir=...), JDK 17, appareil arm64-v8a
 ./gradlew assembleDebug        # APK debug ~72 Mo
 ./gradlew installDebug         # installe sur l'appareil connecté
+./gradlew testDebugUnitTest    # tests unitaires JVM (préprocesseur markdown) — sans device
 
 # Libs natives optionnelles (accélération), non versionnées :
 ./scripts/fetch_npu_libs.sh    # dispatch NPU Google Tensor (Pixel G5)
@@ -100,7 +122,8 @@ Scripts legacy de bundling encore présents (`download_model.sh`, `split_model.s
 ## 9. Limites connues / risque résiduel
 
 - **APK debug-signed** (sideload OK ; signature release à configurer pour Play Store).
-- **Pas de tests automatisés** (régression manuelle uniquement).
+- **Tests** : 15 tests unitaires JVM sur le préprocesseur markdown/maths ; **pas encore de
+  tests instrumentés** (UI Compose / génération) → régression UI manuelle.
 - Robustesse mémoire sur appareils bas de gamme non testée (modèle 2,4 Go + largeHeap).
 - Pas de **PRIVACY.md** / politique de confidentialité (requise Play Store, permissions micro/photos).
 - Image `content://` : persistée localement à l'envoi (sinon non ré-affichable après redémarrage).

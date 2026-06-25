@@ -212,7 +212,9 @@ private fun CodeBlock(code: String, language: String?) {
 }
 
 private fun parseInline(s: String): AnnotatedString = buildAnnotatedString {
-    appendInline(s)
+    // Nettoyage LaTeX/maths d'abord (n'affecte que le texte de prose / titres /
+    // listes ; les blocs de code passent par CodeBlock sans parseInline).
+    appendInline(cleanupMath(s))
 }
 
 private fun androidx.compose.ui.text.AnnotatedString.Builder.appendInline(s: String) {
