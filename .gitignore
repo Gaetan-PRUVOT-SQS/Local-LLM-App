@@ -2,28 +2,23 @@
 .gradle/
 .kotlin/
 /local.properties
-/.idea/
+.idea/
 .DS_Store
-/build/
+build/
 /captures/
 .externalNativeBuild/
 .cxx/
 *.apk
 *.ap_
 *.aab
-*.keystore
-*.jks
-/keystore/
-keystore.properties
 
-# NPU dispatch lib — fetched via scripts/fetch_npu_libs.sh
-app/src/main/jniLibs/arm64-v8a/libLiteRtDispatch_GoogleTensor.so
+# Native libs tierces — régénérées par les scripts (pas committées) :
+#   scripts/fetch_npu_libs.sh   -> libLiteRtDispatch_GoogleTensor.so
+#   scripts/fetch_gpu_sampler.sh -> libLiteRtTopKOpenClSampler.so
+app/src/main/jniLibs/**/*.so
 
-# Bundled model (~2,4 Go) — local only, not committed
+# Modèle bundlé (~2,4 Go) — local uniquement, régénéré par les scripts :
+#   scripts/download_model.sh + scripts/split_model.sh
 models/*.litertlm
-models/chunks
 models/chunks/
 models/.cache/
-
-# Build local
-app/build/

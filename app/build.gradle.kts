@@ -1,34 +1,9 @@
-import java.io.FileInputStream
-import java.util.Properties
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
-
-// Clés de signature release — secrets résolus dans l'ordre :
-//   1) propriété Gradle (-P / gradle.properties)   2) variable d'environnement (CI)
-//   3) keystore.properties local (non versionné, dev uniquement)
-val keystorePropsFile = rootProject.file("keystore.properties")
-val keystoreProps = Properties().apply {
-    if (keystorePropsFile.exists()) FileInputStream(keystorePropsFile).use { load(it) }
-}
-fun secret(name: String, fallbackKey: String): String? =
-    (project.findProperty(name) as String?)
-        ?: System.getenv(name)
-        ?: (keystoreProps[fallbackKey] as String?)
-
-val ksStoreFile = secret("RELEASE_STORE_FILE", "storeFile")
-val ksStorePassword = secret("RELEASE_STORE_PASSWORD", "storePassword")
-val ksKeyAlias = secret("RELEASE_KEY_ALIAS", "keyAlias")
-val ksKeyPassword = secret("RELEASE_KEY_PASSWORD", "keyPassword")
-val hasReleaseSigning = listOf(ksStoreFile, ksStorePassword, ksKeyAlias, ksKeyPassword).all { it != null }
-
-// URL de téléchargement du modèle, surchargeable sans recompiler le code
-// (ex. miroir non-gated) : -PMODEL_URL_OVERRIDE=https://… ou variable d'env.
-val modelUrlOverride = (project.findProperty("MODEL_URL_OVERRIDE") as String?)
-    ?: System.getenv("MODEL_URL_OVERRIDE") ?: ""
 
 java {
     toolchain {
@@ -36,41 +11,40 @@ java {
     }
 }
 
+val bundledModelFile = rootProject.layout.projectDirectory.file("models/gemma-4-E2B-it.litertlm").asFile
+val bundledChunksDir = rootProject.layout.projectDirectory.dir("models/chunks").asFile
+val bundledManifest = rootProject.layout.projectDirectory.file("models/chunks/manifest.json").asFile
+
 android {
-    namespace = "com.gaetan.localllmapp"
+    namespace = "com.gaetan.gemmchat"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.gaetan.localllmapp"
+        applicationId = "com.gaetan.gemmchat"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0.0"
-        buildConfigField("String", "MODEL_URL_OVERRIDE", "\"$modelUrlOverride\"")
     }
 
-    signingConfigs {
-        create("release") {
-            if (hasReleaseSigning) {
-                storeFile = rootProject.file(ksStoreFile!!)
-                storePassword = ksStorePassword
-                keyAlias = ksKeyAlias
-                keyPassword = ksKeyPassword
-            }
+    sourceSets {
+        getByName("main") {
+            // Chunks seulement — pas le .litertlm entier (> limite Java 2 Go)
+            assets.srcDirs("src/main/assets", "${rootProject.projectDir}/models/chunks")
         }
+    }
+
+    androidResources {
+        noCompress += listOf("bin", "json")
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            if (hasReleaseSigning) {
-                signingConfig = signingConfigs.getByName("release")
-            }
         }
     }
 
@@ -93,12 +67,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-
-    lint {
-        // lintVital plante sur la chaîne d'outils (JDK 26) — désactivé pour la build release.
-        checkReleaseBuilds = false
-        abortOnError = false
-    }
 }
 
 dependencies {
@@ -118,9 +86,29 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     implementation("io.coil-kt:coil-compose:2.7.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
+}
 
-    testImplementation("junit:junit:4.13.2")
+tasks.named("preBuild") {
+    doFirst {
+        require(bundledManifest.exists()) {
+            """
+            Chunks du modèle Gemma 4 E2B Q4 manquants.
+            Le fichier .litertlm (~2,4 Go) dépasse la limite Android (2 Go) — il doit être découpé.
+
+            Lancez:
+              ./scripts/build_bundled_apk.sh
+
+            Ou manuellement:
+              ./scripts/download_model.sh
+              ./scripts/split_model.sh
+            """.trimIndent()
+        }
+        if (!bundledModelFile.exists()) {
+            logger.lifecycle("Note: modèle source absent, chunks présents — OK pour la compilation.")
+        }
+    }
 }

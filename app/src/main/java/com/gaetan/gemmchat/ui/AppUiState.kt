@@ -1,0 +1,64 @@
+package com.gaetan.gemmchat.ui
+
+import android.net.Uri
+import com.gaetan.gemmchat.data.ExtractProgress
+import com.gaetan.gemmchat.data.ModelVariant
+import com.gaetan.gemmchat.device.TensorGeneration
+import com.gaetan.gemmchat.llm.BackendChoice
+import com.gaetan.gemmchat.llm.EngineMode
+
+enum class AppScreen {
+    LOADING,
+    CHAT,
+}
+
+data class ChatMessage(
+    val role: MessageRole,
+    val text: String,
+    val imageUri: Uri? = null,
+    val audioLabel: String? = null,
+    val isStreaming: Boolean = false,
+    val id: String = java.util.UUID.randomUUID().toString(),
+    val createdAt: Long = System.currentTimeMillis(),
+)
+
+enum class MessageRole {
+    USER,
+    ASSISTANT,
+}
+
+data class ConversationSummary(
+    val id: String,
+    val title: String,
+    val updatedAt: Long,
+)
+
+data class AppUiState(
+    val screen: AppScreen = AppScreen.LOADING,
+    val deviceSocModel: String = "",
+    val deviceSummary: String = "",
+    val tensorGeneration: TensorGeneration = TensorGeneration.NONE,
+    val isPixelTensor: Boolean = false,
+    val supportsGemma4Npu: Boolean = false,
+    val selectedModelVariant: ModelVariant = ModelVariant.Q4,
+    val isExtractingModel: Boolean = false,
+    val extractProgress: ExtractProgress? = null,
+    val extractError: String? = null,
+    val isInitializing: Boolean = false,
+    val initError: String? = null,
+    val engineMode: EngineMode = EngineMode.MULTIMODAL,
+    val backend: BackendChoice = BackendChoice.GPU,
+    val messages: List<ChatMessage> = emptyList(),
+    val conversations: List<ConversationSummary> = emptyList(),
+    val currentConversationId: String? = null,
+    val isDrawerOpen: Boolean = false,
+    val inputText: String = "",
+    val pendingImageUri: Uri? = null,
+    val pendingAudioUri: Uri? = null,
+    val pendingAudioFilePath: String? = null,
+    val pendingAudioLabel: String? = null,
+    val isRecordingAudio: Boolean = false,
+    val recordingElapsedMs: Long = 0L,
+    val isGenerating: Boolean = false,
+    val statusMessage: String? = null,
+)
