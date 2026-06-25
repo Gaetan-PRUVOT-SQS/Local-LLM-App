@@ -18,36 +18,27 @@ Construite en Kotlin / Jetpack Compose, inférence via **LiteRT‑LM**.
 - Android Studio (AGP 8.7+), JDK 17
 - Android SDK (définir `sdk.dir` dans `local.properties`)
 - Un appareil/émulateur **arm64‑v8a**, `minSdk 26`
-- Accès au modèle sur Hugging Face : `litert-community/gemma-4-E2B-it-litert-lm`
-  (export `HF_TOKEN` si nécessaire)
 
-## Préparer le modèle (non versionné)
+## Modèle (téléchargé au premier lancement)
 
-Le modèle (~2,4 Go) et les bibliothèques natives ne sont pas dans le dépôt ; des scripts les récupèrent :
+Le modèle (~2,4 Go) **n'est pas embarqué** dans l'APK : l'application le télécharge
+automatiquement au premier démarrage depuis Hugging Face
+(`litert-community/gemma-4-E2B-it-litert-lm`, **public, sans token**), avec
+barre de progression et **reprise** en cas de coupure. Wi‑Fi conseillé.
+→ APK léger (~70 Mo).
+
+Bibliothèques natives optionnelles (accélération), non versionnées :
 
 ```bash
-# Télécharge le modèle puis le découpe en chunks (< limite 2 Go d'Android)
-./scripts/download_model.sh
-./scripts/split_model.sh
-
-# (optionnel) accélérateurs natifs
 ./scripts/fetch_npu_libs.sh      # dispatch NPU Google Tensor (Pixel G5)
 ./scripts/fetch_gpu_sampler.sh   # sampling top‑K sur GPU (~2x le débit de décodage)
 ```
 
-Le modèle est embarqué dans l'APK sous forme de chunks et réassemblé au premier lancement.
-
 ## Construire
 
 ```bash
-./gradlew assembleDebug      # APK debug
+./gradlew assembleDebug      # APK debug (~70 Mo)
 ./gradlew installDebug       # installer sur l'appareil connecté
-```
-
-Ou tout en un :
-
-```bash
-./scripts/build_bundled_apk.sh
 ```
 
 ## Architecture
@@ -55,7 +46,7 @@ Ou tout en un :
 ```
 app/src/main/java/com/gaetan/gemmchat/
 ├─ llm/        moteur LiteRT‑LM (init, backends, conversation, streaming)
-├─ data/       modèle bundlé (chunks), préférences, persistance des conversations
+├─ data/       téléchargement du modèle, préférences, persistance des conversations
 ├─ audio/      enregistrement WAV (AudioRecord)
 ├─ device/     détection SoC / génération Tensor
 └─ ui/         écrans Compose (chat, chargement, tiroir, thème)

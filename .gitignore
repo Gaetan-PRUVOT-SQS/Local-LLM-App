@@ -13,12 +13,11 @@ build/
 *.aab
 
 # Native libs tierces — régénérées par les scripts (pas committées) :
-#   scripts/fetch_npu_libs.sh   -> libLiteRtDispatch_GoogleTensor.so
+#   scripts/fetch_npu_libs.sh    -> libLiteRtDispatch_GoogleTensor.so
 #   scripts/fetch_gpu_sampler.sh -> libLiteRtTopKOpenClSampler.so
 app/src/main/jniLibs/**/*.so
 
-# Modèle bundlé (~2,4 Go) — local uniquement, régénéré par les scripts :
-#   scripts/download_model.sh + scripts/split_model.sh
+# Modèle (~2,4 Go) — téléchargé au runtime / local uniquement, jamais committé :
 models/*.litertlm
 models/chunks/
 models/.cache/

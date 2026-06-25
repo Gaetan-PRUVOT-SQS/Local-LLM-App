@@ -7,9 +7,9 @@ import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.gaetan.gemmchat.audio.AudioRecorder
-import com.gaetan.gemmchat.data.BundledModelInstaller
 import com.gaetan.gemmchat.data.ConversationStore
 import com.gaetan.gemmchat.data.InstallResult
+import com.gaetan.gemmchat.data.ModelDownloader
 import com.gaetan.gemmchat.data.ModelPreferences
 import com.gaetan.gemmchat.data.ModelRepository
 import com.gaetan.gemmchat.data.ModelVariant
@@ -37,7 +37,7 @@ import java.util.UUID
 class AppViewModel(application: Application) : AndroidViewModel(application) {
     private val modelPreferences = ModelPreferences(application)
     private val modelRepository = ModelRepository(application, modelPreferences)
-    private val bundledModelInstaller = BundledModelInstaller(application, modelRepository)
+    private val modelDownloader = ModelDownloader(modelRepository)
     private val llmEngine = LlmEngine(application)
     private val chatRepository = ChatRepository(application, llmEngine)
     private val audioRecorder = AudioRecorder(application)
@@ -517,7 +517,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             when (
-                val result = bundledModelInstaller.ensureInstalled(
+                val result = modelDownloader.ensureDownloaded(
                     variant = variant,
                     onProgress = { progress ->
                         _uiState.update { state ->

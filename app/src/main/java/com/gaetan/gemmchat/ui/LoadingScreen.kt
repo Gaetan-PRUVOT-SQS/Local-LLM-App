@@ -60,7 +60,7 @@ fun LoadingScreen(
                         strokeWidth = 3.dp,
                     )
                     Text(
-                        text = "Préparation de Gemma 4 E2B Q4…",
+                        text = "Téléchargement de Gemma 4 E2B…",
                         fontFamily = ManropeFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
@@ -79,8 +79,10 @@ fun LoadingScreen(
                             color = GemmaColors.AccentPurpleSoft,
                             trackColor = GemmaColors.SurfaceElevated,
                         )
+                        val doneMo = progress.bytesCopied / 1_000_000
+                        val totalMo = progress.totalBytes / 1_000_000
                         Text(
-                            text = "${(progress.percent * 100).toInt()}% — première installation uniquement",
+                            text = "${(progress.percent * 100).toInt()}% · $doneMo / $totalMo Mo — téléchargement unique (Wi‑Fi conseillé)",
                             fontFamily = ManropeFamily,
                             fontWeight = FontWeight.Medium,
                             fontSize = 13.sp,
@@ -89,7 +91,7 @@ fun LoadingScreen(
                             textAlign = TextAlign.Center,
                         )
                     } ?: Text(
-                        text = "Assemblage depuis l'APK (~2,4 Go, une fois)…",
+                        text = "Connexion au serveur du modèle (~2,4 Go)…",
                         fontFamily = ManropeFamily,
                         fontWeight = FontWeight.Medium,
                         fontSize = 14.sp,

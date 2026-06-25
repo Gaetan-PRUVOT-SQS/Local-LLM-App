@@ -29,6 +29,10 @@ enum class ModelVariant(
         supportsNpu = true,
     );
 
+    /** URL de téléchargement direct (public, non-gated) sur Hugging Face. */
+    val downloadUrl: String
+        get() = "https://huggingface.co/${BundledModel.HF_REPO}/resolve/main/$fileName"
+
     companion object {
         val bundled: ModelVariant = Q4
     }

@@ -11,10 +11,6 @@ java {
     }
 }
 
-val bundledModelFile = rootProject.layout.projectDirectory.file("models/gemma-4-E2B-it.litertlm").asFile
-val bundledChunksDir = rootProject.layout.projectDirectory.dir("models/chunks").asFile
-val bundledManifest = rootProject.layout.projectDirectory.file("models/chunks/manifest.json").asFile
-
 android {
     namespace = "com.gaetan.gemmchat"
     compileSdk = 35
@@ -27,16 +23,8 @@ android {
         versionName = "1.0.0"
     }
 
-    sourceSets {
-        getByName("main") {
-            // Chunks seulement — pas le .litertlm entier (> limite Java 2 Go)
-            assets.srcDirs("src/main/assets", "${rootProject.projectDir}/models/chunks")
-        }
-    }
-
-    androidResources {
-        noCompress += listOf("bin", "json")
-    }
+    // Le modèle (~2,4 Go) n'est plus embarqué : il est téléchargé au premier
+    // lancement (ModelDownloader) → APK léger.
 
     buildTypes {
         release {
@@ -90,25 +78,4 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.7.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
-}
-
-tasks.named("preBuild") {
-    doFirst {
-        require(bundledManifest.exists()) {
-            """
-            Chunks du modèle Gemma 4 E2B Q4 manquants.
-            Le fichier .litertlm (~2,4 Go) dépasse la limite Android (2 Go) — il doit être découpé.
-
-            Lancez:
-              ./scripts/build_bundled_apk.sh
-
-            Ou manuellement:
-              ./scripts/download_model.sh
-              ./scripts/split_model.sh
-            """.trimIndent()
-        }
-        if (!bundledModelFile.exists()) {
-            logger.lifecycle("Note: modèle source absent, chunks présents — OK pour la compilation.")
-        }
-    }
 }
